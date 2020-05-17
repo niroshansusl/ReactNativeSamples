@@ -10,6 +10,11 @@ import { withNavigation } from 'react-navigation';
 import ResultsDetail from "../components/ResultsDetail";
 
 const ResultsList = function ({ title, results, navigation }) {
+
+    if(!results.length){
+        return null;
+    }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -19,16 +24,16 @@ const ResultsList = function ({ title, results, navigation }) {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(results) => results.id}
         renderItem={({ item }) => {
-          return (
-            // <TouchableOpacity
-            //   onPress={() =>
-            //     navigation.navigate("ResultsShow", { id: item.id })
-            //   }
-            // >
-            // </TouchableOpacity>
-            <ResultsDetail result={item} />
-          );
-        }}
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Detail', { id: item.id })
+                }
+              >
+                <ResultsDetail result={item} />
+              </TouchableOpacity>
+            );
+          }}
       />
     </View>
   );
@@ -46,4 +51,4 @@ const styles = StyleSheet.create({
       }
 });
 
-export default ResultsList;
+export default withNavigation(ResultsList);
