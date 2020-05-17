@@ -38,12 +38,17 @@ const DetailPageScreen = function ({ navigation }) {
 const styles = StyleSheet.create({
     image:{
         height:200,
-        width:300
+        width:300,
+        marginTop:10,
+        
     },
     text:{
         fontWeight:"bold",
-        fontSize:18
+        fontSize:18,
+        marginHorizontal:10,
+        marginTop:10
     }
 });
+
 
 export default DetailPageScreen;
