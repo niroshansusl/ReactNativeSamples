@@ -1,49 +1,47 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import SearchBar from "../components/SearchBar";
-import yelp from "../api/yelp";
+import useResults from "../hooks/useResults";
+import ResultsList from "../components/ResultsList";
 
 const SearchScreen = function () {
   const [term, setTerm] = useState("");
-  const [results, setResults] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [searchApi, results, errorMessage] = useResults();
 
-  const searchApi = async (searchTerm) => {
-    try {
-      const response = await yelp.get("/search", {
-        params: {
-          limit: 50,
-          term: searchTerm,
-          location: "san jose",
-        },
-      });
-      setResults(response.data.businesses);
-    } catch (err) {
-      setErrorMessage('Something went wrong')
-    }
+  console.log(results);
+
+  const filterResultsByPrice = (price) => {
+    // price === '$' || '$$' || '$$$'
+    return results.filter((result) => {
+      return result.price === price;
+    });
   };
 
   return (
-    <View style={styles.backGround}>
+    <>
       <SearchBar
         term={term}
-        onTermChange={function (newTerm) {
-          setTerm(newTerm);
-        }}
+        onTermChange={setTerm}
         onTermSubmit={function () {
-          searchApi();
+          searchApi(term);
         }}
       />
-      {errorMessage?<Text>{errorMessage}</Text>: null}
-      <Text>We got {results.length} results</Text>
-    </View>
+      {/* {errorMessage ? <Text>{errorMessage}</Text> : null} */}
+      <ScrollView style={{ marginTop: 10 }}>
+        <ResultsList
+          results={filterResultsByPrice("$")}
+          title="Cost Effective"
+        />
+        <ResultsList results={filterResultsByPrice("$$")} title="Bit Pricier" />
+        <ResultsList
+          results={filterResultsByPrice("$$$")}
+          title="Big Spender"
+        />
+      </ScrollView>
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  backGround: {
-    backgroundColor: "white",
-  },
-});
+const styles = StyleSheet.create({});
 
 export default SearchScreen;
