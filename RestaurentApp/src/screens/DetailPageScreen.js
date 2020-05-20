@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Image, View, StyleSheet, Text, FlatList } from "react-native";
 import yelp from "../api/yelp";
+import { HeaderTitle } from "react-navigation-stack";
 
 const DetailPageScreen = function ({ navigation }) {
   const [result, setResult] = useState(null);
@@ -34,6 +35,10 @@ const DetailPageScreen = function ({ navigation }) {
     </View>
   );
 };
+
+DetailPageScreen.navigationOptions = () =>{
+  HeaderTitle:'New Title'
+}
 
 const styles = StyleSheet.create({
     image:{
